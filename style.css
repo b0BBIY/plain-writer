@@ -1,0 +1,187 @@
+/* Plain Writer's website. One page, one short script (for the video). Colours follow the app's own
+   light and dark themes; Inter is bundled under the SIL Open Font License
+   (see fonts/LICENSE-Inter.txt). */
+@font-face { font-family: "Inter"; src: url("fonts/inter-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("fonts/inter-latin-400-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("fonts/inter-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+
+:root {
+  --bg: #f7f6f2;
+  --raised: #ffffff;
+  --fg: #1c1c1a;
+  --muted: #6f6c65;
+  --line: #e2dfd6;
+  --accent: #0a6fd8;
+  --on-accent: #ffffff;
+  --shadow: 0 1px 2px rgba(40, 36, 24, 0.06), 0 18px 48px rgba(40, 36, 24, 0.14);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1a19;
+    --raised: #222220;
+    --fg: #e6e4de;
+    --muted: #9a978f;
+    --line: #2f2e2b;
+    --accent: #4da3ff;
+    --on-accent: #0c1420;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 18px 48px rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 17px/1.65 "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+a { color: inherit; }
+img { display: block; max-width: 100%; height: auto; }
+code { font: 0.9em/1 "Cascadia Mono", Consolas, ui-monospace, monospace; background: var(--line); padding: 0.12em 0.36em; border-radius: 4px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+/* ---- Top bar ---- */
+.top {
+  position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px clamp(18px, 5vw, 56px);
+  background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+}
+.brand { display: flex; align-items: center; gap: 9px; font-weight: 700; text-decoration: none; letter-spacing: -0.01em; }
+.brand img { border-radius: 5px; }
+.top nav { display: flex; align-items: center; gap: clamp(10px, 2.2vw, 26px); font-size: 14.5px; }
+.top nav a { text-decoration: none; color: var(--muted); }
+.top nav a:hover { color: var(--fg); }
+.top nav .pill { color: var(--fg); border: 1px solid var(--line); padding: 5px 13px; border-radius: 999px; }
+.top nav .pill:hover { border-color: var(--fg); }
+@media (max-width: 640px) { .top nav a:not(.pill) { display: none; } }
+
+/* ---- Shared ---- */
+main { overflow: hidden; }
+section { padding: clamp(56px, 9vw, 120px) clamp(18px, 5vw, 56px); }
+h1, h2 { margin: 0; letter-spacing: -0.028em; line-height: 1.08; text-wrap: balance; }
+h1 { font-size: clamp(38px, 6.4vw, 76px); max-width: 16ch; }
+h2 { font-size: clamp(28px, 3.8vw, 44px); max-width: 20ch; }
+p { margin: 0; }
+.kicker { font-size: 13px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+.small { font-size: 14px; color: var(--muted); }
+.button {
+  display: inline-block; padding: 13px 24px; border-radius: 999px; background: var(--fg); color: var(--bg);
+  font-weight: 700; font-size: 16px; text-decoration: none; letter-spacing: -0.005em;
+}
+a.button:hover { background: var(--accent); color: var(--on-accent); }
+.button.waiting { background: transparent; color: var(--muted); border: 1px dashed var(--muted); cursor: default; }
+.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 20px; }
+.actions.centre { justify-content: center; }
+.aside { color: var(--muted); font-size: 15px; }
+.shot { margin: 0; }
+.shot video { display: block; width: 100%; height: auto; }
+.shot img, .shot video { border-radius: 12px; box-shadow: var(--shadow); border: 1px solid color-mix(in srgb, var(--fg) 9%, transparent); }
+
+/* ---- Hero ---- */
+.hero { max-width: 1240px; margin: 0 auto; padding-bottom: clamp(40px, 6vw, 72px); }
+.lede { font-size: clamp(18px, 1.9vw, 22px); line-height: 1.55; color: var(--muted); max-width: 46ch; margin: 26px 0 30px; }
+.shot.wide { margin-top: clamp(40px, 6vw, 72px); }
+
+/* ---- The principle ---- */
+.principle { max-width: 780px; margin: 0 auto; text-align: left; }
+.principle h2 { max-width: none; margin-bottom: 20px; }
+.principle p { font-size: clamp(18px, 1.8vw, 21px); line-height: 1.6; color: var(--muted); }
+
+/* ---- Next to a word processor ---- */
+.compare { max-width: 1240px; margin: 0 auto; border-top: 1px solid var(--line); }
+.compare .words { max-width: 780px; }
+.compare .words p:not(.kicker) { color: var(--muted); margin-top: 18px; max-width: 60ch; }
+.compare table { width: 100%; margin-top: clamp(32px, 5vw, 56px); border-collapse: collapse; font-size: 16px; line-height: 1.5; }
+.compare th, .compare td { text-align: left; vertical-align: top; padding: 16px 18px 16px 0; border-top: 1px solid var(--line); }
+.compare thead th { border-top: 0; padding-bottom: 12px; font-size: 13px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+.compare thead th:last-child { color: var(--accent); }
+.compare tbody th { width: 24%; font-weight: 700; }
+.compare td { width: 38%; color: var(--muted); }
+.compare td:last-child { color: var(--fg); }
+@media (max-width: 720px) {
+  /* Too narrow for three columns: each row becomes a small card. */
+  .compare thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .compare tr { display: block; padding: 16px 0; border-top: 1px solid var(--line); }
+  .compare th, .compare td { display: block; width: auto; padding: 0; border: 0; }
+  .compare td { margin-top: 6px; }
+  .compare td::before { display: block; font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+  .compare td:nth-of-type(1)::before { content: "A word processor"; }
+  .compare td:nth-of-type(2)::before { content: "Plain Writer"; color: var(--accent); }
+}
+
+/* ---- The stage: one feature given the full width ---- */
+.stage { max-width: 1240px; margin: 0 auto; border-top: 1px solid var(--line); }
+.stage .words { display: grid; align-items: end; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px clamp(28px, 5vw, 76px); }
+.stage .body p { color: var(--muted); max-width: 54ch; }
+.stage .body p + p { margin-top: 16px; }
+.stage .shot.wide { margin-top: clamp(32px, 5vw, 60px); }
+@media (max-width: 860px) { .stage .words { grid-template-columns: 1fr; } }
+
+/* ---- Features: words beside a picture, alternating sides ---- */
+.feature {
+  max-width: 1240px; margin: 0 auto; display: grid; align-items: center;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 76px);
+  border-top: 1px solid var(--line);
+}
+.feature.flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } /* the picture keeps the wide side */
+.feature.flip .words { order: 2; }
+.feature .words p:not(.kicker) { color: var(--muted); margin-top: 18px; max-width: 44ch; }
+.feature h2 { margin-bottom: 4px; }
+@media (max-width: 860px) {
+  .feature { grid-template-columns: 1fr; }
+  .feature.flip .words { order: 0; }
+}
+
+/* ---- The rest of what it does ---- */
+.also { max-width: 1240px; margin: 0 auto; border-top: 1px solid var(--line); }
+.also h2 { margin-bottom: 30px; }
+.also ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px 44px; }
+.also li { color: var(--muted); padding: 14px 0; border-top: 1px solid var(--line); }
+.also b { color: var(--fg); font-weight: 700; }
+
+/* ---- Getting started ---- */
+.start { max-width: 1240px; margin: 0 auto; border-top: 1px solid var(--line); }
+.start h2 { margin-bottom: 30px; }
+.start ol { list-style: none; margin: 0; padding: 0; counter-reset: step; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px 44px; }
+.start li { counter-increment: step; display: flex; flex-direction: column; gap: 6px; padding-top: 16px; border-top: 1px solid var(--line); }
+.start li::before { content: counter(step); font-size: 13px; font-weight: 700; color: var(--accent); }
+.start li b { font-size: 19px; letter-spacing: -0.01em; }
+.start li span { color: var(--muted); }
+.start a { color: var(--fg); text-underline-offset: 3px; }
+
+/* ---- The shortcuts page ---- */
+.keys { max-width: 860px; margin: 0 auto; padding: clamp(48px, 8vw, 96px) clamp(18px, 5vw, 56px); }
+.keys h1 { font-size: clamp(34px, 5vw, 56px); max-width: none; }
+.keys section { padding: 0; margin-top: 44px; }
+.keys h2 { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); max-width: none; margin-bottom: 4px; }
+.keys table { width: 100%; border-collapse: collapse; }
+.keys th, .keys td { padding: 12px 0; border-top: 1px solid var(--line); vertical-align: baseline; }
+.keys th { text-align: left; font-weight: 400; padding-right: 20px; }
+.keys td { text-align: right; white-space: nowrap; color: var(--muted); }
+kbd {
+  display: inline-block; min-width: 1.7em; padding: 2px 7px; margin: 0 1px; text-align: center;
+  font: 600 13px/1.5 "Inter", system-ui, sans-serif; color: var(--fg);
+  background: var(--raised); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 6px;
+}
+.keys .sep { margin: 0 3px; }
+@media (max-width: 620px) {
+  .keys th, .keys td { display: block; border: 0; padding: 0; text-align: left; white-space: normal; }
+  .keys tr { display: block; padding: 12px 0; border-top: 1px solid var(--line); }
+  .keys td { margin-top: 8px; line-height: 2.1; }
+}
+
+/* ---- Download ---- */
+.download { text-align: center; border-top: 1px solid var(--line); }
+.download h2 { max-width: none; font-size: clamp(34px, 5.4vw, 60px); }
+.download > p { color: var(--muted); max-width: 52ch; margin: 18px auto 0; }
+.download .actions { margin-top: 30px; }
+
+footer {
+  padding: 40px clamp(18px, 5vw, 56px) 56px; border-top: 1px solid var(--line);
+  color: var(--muted); font-size: 14.5px; line-height: 1.6;
+}
+footer p { max-width: 74ch; margin: 0 auto 12px; }
